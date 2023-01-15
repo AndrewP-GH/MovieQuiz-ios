@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B18F76529744C4F00D7CBEB /* MoviesLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE09A54C03EC296A0A7DB900 /* MoviesLoaderTests.swift */; };
 		1BA980EF296DD7BD00D3200F /* QuestionFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA980EE296DD7BD00D3200F /* QuestionFactory.swift */; };
 		1BA980F2296DD9E400D3200F /* QuizStepViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA980F1296DD9E400D3200F /* QuizStepViewModel.swift */; };
 		1BA980F4296DD9F200D3200F /* QuizResultsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA980F3296DD9F200D3200F /* QuizResultsViewModel.swift */; };
@@ -31,7 +32,6 @@
 		AE09A5E1D8513C6983B0F8B8 /* QuestionFactoryDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE09A1CBE50DF273D6DB0178 /* QuestionFactoryDelegate.swift */; };
 		AE09A68A0F251AE3EE148961 /* MostPopularMovies.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE09AB3595C450644C2185C2 /* MostPopularMovies.swift */; };
 		AE09A6A6271D58A5DC012FEB /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE09A9F3015AEFC419C68B2B /* NetworkClient.swift */; };
-		AE09AF1FF28D78F042332BEB /* MoviesLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE09A54C03EC296A0A7DB900 /* MoviesLoaderTests.swift */; };
 		AE09AF9D06D9E7F740ACC7FA /* QuestionFactoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE09AA8A8F69C4451819B416 /* QuestionFactoryProtocol.swift */; };
 /* End PBXBuildFile section */
 
@@ -375,6 +375,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1BA981022971F3AB00D3200F /* MovieQuizTests.swift in Sources */,
+				1B18F76529744C4F00D7CBEB /* MoviesLoaderTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -408,7 +409,6 @@
 				AE09A6A6271D58A5DC012FEB /* NetworkClient.swift in Sources */,
 				AE09A68A0F251AE3EE148961 /* MostPopularMovies.swift in Sources */,
 				AE09A15D5A4B8B83CF50C4D5 /* MoviesLoader.swift in Sources */,
-				AE09AF1FF28D78F042332BEB /* MoviesLoaderTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
