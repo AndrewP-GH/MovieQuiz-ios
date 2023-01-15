@@ -53,7 +53,7 @@ final class MovieQuizUITests: XCTestCase {
             app.buttons["No"].tap()
             sleep(2)
         }
-        let alert = app.alerts.firstMatch;
+        let alert = app.alerts["Game result"];
         XCTAssertTrue(alert.exists)
         XCTAssertTrue(alert.label == "Этот раунд окончен!")
         XCTAssertTrue(alert.buttons.firstMatch.label == "Сыграть ещё раз")
@@ -67,7 +67,7 @@ final class MovieQuizUITests: XCTestCase {
         }
         let poster = "Poster"
         let lastPoster = app.images[poster].screenshot().pngRepresentation
-        let alert = app.alerts.firstMatch;
+        let alert = app.alerts["Game result"];
         alert.buttons.firstMatch.tap()
         sleep(2)
         let indexLabel = app.staticTexts["Index"]
