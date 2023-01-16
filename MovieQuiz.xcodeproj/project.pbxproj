@@ -32,6 +32,7 @@
 		AE09A5E1D8513C6983B0F8B8 /* QuestionFactoryDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE09A1CBE50DF273D6DB0178 /* QuestionFactoryDelegate.swift */; };
 		AE09A68A0F251AE3EE148961 /* MostPopularMovies.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE09AB3595C450644C2185C2 /* MostPopularMovies.swift */; };
 		AE09A6A6271D58A5DC012FEB /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE09A9F3015AEFC419C68B2B /* NetworkClient.swift */; };
+		AE09A6AF1DA3ADE4891E4629 /* MovieQuizPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE09AE7E87A821CEEC8FB188 /* MovieQuizPresenter.swift */; };
 		AE09AF9D06D9E7F740ACC7FA /* QuestionFactoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE09AA8A8F69C4451819B416 /* QuestionFactoryProtocol.swift */; };
 /* End PBXBuildFile section */
 
@@ -83,6 +84,7 @@
 		AE09A9F3015AEFC419C68B2B /* NetworkClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkClient.swift; sourceTree = "<group>"; };
 		AE09AA8A8F69C4451819B416 /* QuestionFactoryProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuestionFactoryProtocol.swift; sourceTree = "<group>"; };
 		AE09AB3595C450644C2185C2 /* MostPopularMovies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MostPopularMovies.swift; sourceTree = "<group>"; };
+		AE09AE7E87A821CEEC8FB188 /* MovieQuizPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieQuizPresenter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +121,7 @@
 				AE09A165814925392C8D2948 /* StatisticService.swift */,
 				AE09A9F3015AEFC419C68B2B /* NetworkClient.swift */,
 				AE09A844458AA4842FB0796F /* MoviesLoader.swift */,
+				AE09AE7E87A821CEEC8FB188 /* MovieQuizPresenter.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -409,6 +412,7 @@
 				AE09A6A6271D58A5DC012FEB /* NetworkClient.swift in Sources */,
 				AE09A68A0F251AE3EE148961 /* MostPopularMovies.swift in Sources */,
 				AE09A15D5A4B8B83CF50C4D5 /* MoviesLoader.swift in Sources */,
+				AE09A6AF1DA3ADE4891E4629 /* MovieQuizPresenter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
