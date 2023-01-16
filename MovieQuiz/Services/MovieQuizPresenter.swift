@@ -90,13 +90,14 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     }
 
     private func showCurrentQuestion() {
+        guard let currentQuestion else {
+            return
+        }
+        let viewModel = convert(model: currentQuestion)
         DispatchQueue.main.async { [weak self] in
-            guard let self,
-                  let question = self.currentQuestion,
-                  let viewController = self.viewController else {
+            guard let self, let viewController = self.viewController else {
                 return
             }
-            let viewModel = self.convert(model: question)
             viewController.show(quiz: viewModel)
             viewController.configureButtons(isEnabled: true)
         }
