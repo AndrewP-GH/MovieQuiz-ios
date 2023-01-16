@@ -8,7 +8,6 @@ final class MovieQuizViewController: UIViewController {
     @IBOutlet private var yesButton: UIButton!
     @IBOutlet private var activityIndicator: UIActivityIndicatorView!
 
-    private var statisticService: StatisticService!
     private var alertPresenter: AlertPresenter!
     private var presenter: MovieQuizPresenter!
 
@@ -17,7 +16,6 @@ final class MovieQuizViewController: UIViewController {
         imageView.layer.cornerRadius = 20
         presenter = MovieQuizPresenter(viewController: self)
         alertPresenter = AlertPresenter()
-        statisticService = StatisticServiceImplementation()
     }
 
     @IBAction func noButtonClicked(_ sender: UIButton) {
@@ -63,7 +61,7 @@ final class MovieQuizViewController: UIViewController {
     func showAnswerResult(isCorrect: Bool) {
         drawBorder(color: isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            self?.showNextQuestionOrResult()
+            self?.presenter.showNextQuestionOrResult()
         }
     }
 
@@ -73,29 +71,13 @@ final class MovieQuizViewController: UIViewController {
         imageView.layer.borderColor = color
     }
 
-    private func showNextQuestionOrResult() {
-        presenter.statisticService = statisticService
-        presenter.showNextQuestionOrResult()
-    }
-
     func showResult() {
         let model = AlertModel(
                 title: "Этот раунд окончен!",
-                message: formatResultMessage(),
+                message: presenter.getResultMessage(),
                 buttonText: "Сыграть ещё раз") { [weak self] in
             self?.presenter.restartGame()
         }
         alertPresenter.show(with: model, in: self)
     }
-
-    private func formatResultMessage() -> String {
-        let bestGame = statisticService.bestGame
-        return """
-               Ваш результат: \(presenter.correctAnswers) из \(presenter.questionsAmount)
-               Количество сыгранных квизов: \(statisticService.gamesCount)
-               Рекорд: \(bestGame.correct)/\(bestGame.total) (\(bestGame.date.dateTimeString))
-               Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy * 100))%
-               """
-    }
-
 }

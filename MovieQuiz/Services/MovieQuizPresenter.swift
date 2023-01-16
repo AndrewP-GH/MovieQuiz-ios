@@ -11,15 +11,19 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     var currentQuestion: QuizQuestion?
     weak var viewController: MovieQuizViewController!
     var questionFactory: QuestionFactoryProtocol!
-    var statisticService: StatisticService?
+    var statisticService: StatisticService!
 
     init(viewController: MovieQuizViewController) {
         self.viewController = viewController
         questionFactory = QuestionFactory(delegate: self, moviesLoader: MoviesLoader())
+        statisticService = StatisticServiceImplementation()
         loadData()
     }
 
     func loadData() {
+        guard let viewController else {
+            return
+        }
         viewController.showLoadingIndicator()
         questionFactory.loadData()
     }
@@ -98,11 +102,21 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
 
     func showNextQuestionOrResult() {
         if isLastQuestion() {
-            statisticService?.store(correct: correctAnswers, total: questionsAmount)
+            statisticService.store(correct: correctAnswers, total: questionsAmount)
             viewController?.showResult()
         } else {
             switchToNextQuestion()
             questionFactory.requestNextQuestion()
         }
+    }
+
+    func getResultMessage() -> String {
+        let bestGame = statisticService.bestGame
+        return """
+               Ваш результат: \(correctAnswers) из \(questionsAmount)
+               Количество сыгранных квизов: \(statisticService.gamesCount)
+               Рекорд: \(bestGame.correct)/\(bestGame.total) (\(bestGame.date.dateTimeString))
+               Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy * 100))%
+               """
     }
 }
