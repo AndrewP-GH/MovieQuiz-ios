@@ -1,6 +1,6 @@
 import UIKit
 
-final class MovieQuizViewController: UIViewController {
+final class MovieQuizViewController: UIViewController, MovieQuizViewControllerProtocol {
     @IBOutlet private var imageView: UIImageView!
     @IBOutlet private var textLabel: UILabel!
     @IBOutlet private var counterLabel: UILabel!
@@ -69,11 +69,11 @@ final class MovieQuizViewController: UIViewController {
         imageView.layer.borderColor = color
     }
 
-    func showResult() {
+    func show(quiz result: QuizResultsViewModel) {
         let model = AlertModel(
-                title: "Этот раунд окончен!",
-                message: movieQuizPresenter.getResultMessage(),
-                buttonText: "Сыграть ещё раз") { [weak self] in
+                title: result.title,
+                message: result.text,
+                buttonText: result.buttonText) { [weak self] in
             self?.movieQuizPresenter.restartGame()
         }
         alertPresenter.show(with: model, in: self)
