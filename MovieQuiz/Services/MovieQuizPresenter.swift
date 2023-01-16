@@ -77,10 +77,6 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         currentQuestionIndex == questionsAmount - 1
     }
 
-    private func switchToNextQuestion() {
-        currentQuestionIndex += 1
-    }
-
     private func didAnswer(isCorrectAnswer: Bool) {
         guard let currentQuestion else {
             return
@@ -115,7 +111,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
                     buttonText: "Сыграть ещё раз")
             )
         } else {
-            switchToNextQuestion()
+            currentQuestionIndex += 1
             questionFactory.requestNextQuestion()
         }
     }
