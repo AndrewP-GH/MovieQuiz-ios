@@ -8,22 +8,23 @@ final class MovieQuizViewController: UIViewController {
     @IBOutlet private var yesButton: UIButton!
     @IBOutlet private var activityIndicator: UIActivityIndicatorView!
 
+    private var movieQuizPresenter: MovieQuizPresenter!
     private var alertPresenter: AlertPresenter!
-    private var presenter: MovieQuizPresenter!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         imageView.layer.cornerRadius = 20
-        presenter = MovieQuizPresenter(viewController: self)
+        movieQuizPresenter = MovieQuizPresenter(viewController: self)
         alertPresenter = AlertPresenter()
     }
 
+
     @IBAction func noButtonClicked(_ sender: UIButton) {
-        presenter.noButtonClicked()
+        movieQuizPresenter.noButtonClicked()
     }
 
     @IBAction func yesButtonClicked(_ sender: UIButton) {
-        presenter.yesButtonClicked()
+        movieQuizPresenter.yesButtonClicked()
     }
 
     func configureButtons(isEnabled: Bool) {
@@ -46,27 +47,24 @@ final class MovieQuizViewController: UIViewController {
                 title: "Ошибка",
                 message: message,
                 buttonText: "Попробовать еще раз") { [weak self] in
-            self?.presenter.loadData()
+            self?.movieQuizPresenter.loadData()
         }
         alertPresenter.show(with: model, in: self)
     }
 
     func show(quiz step: QuizStepViewModel) {
-        imageView.layer.borderWidth = 0
+        imageView.layer.borderColor = UIColor.clear.cgColor
         imageView.image = step.image
         textLabel.text = step.question
         counterLabel.text = step.questionNumber
     }
 
-    func showAnswerResult(isCorrect: Bool) {
-        drawBorder(color: isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            self?.presenter.showNextQuestionOrResult()
-        }
+    func highlightImageBorder(isCorrectAnswer: Bool) {
+        imageView.layer.masksToBounds = true
+        drawBorder(color: isCorrectAnswer ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor)
     }
 
     private func drawBorder(color: CGColor) {
-        imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 8
         imageView.layer.borderColor = color
     }
@@ -74,9 +72,9 @@ final class MovieQuizViewController: UIViewController {
     func showResult() {
         let model = AlertModel(
                 title: "Этот раунд окончен!",
-                message: presenter.getResultMessage(),
+                message: movieQuizPresenter.getResultMessage(),
                 buttonText: "Сыграть ещё раз") { [weak self] in
-            self?.presenter.restartGame()
+            self?.movieQuizPresenter.restartGame()
         }
         alertPresenter.show(with: model, in: self)
     }
