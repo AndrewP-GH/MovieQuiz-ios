@@ -4,12 +4,25 @@
 
 import UIKit
 
-final class MovieQuizPresenter {
-
+final class MovieQuizPresenter: QuestionFactoryDelegate {
     let questionsAmount = 10
     private var currentQuestionIndex: Int = 0
+    var correctAnswers: Int = 0
     var currentQuestion: QuizQuestion?
-    weak var viewController: MovieQuizViewController?
+    weak var viewController: MovieQuizViewController!
+    var questionFactory: QuestionFactoryProtocol!
+    var statisticService: StatisticService?
+
+    init(viewController: MovieQuizViewController) {
+        self.viewController = viewController
+        questionFactory = QuestionFactory(delegate: self, moviesLoader: MoviesLoader())
+        loadData()
+    }
+
+    func loadData() {
+        viewController.showLoadingIndicator()
+        questionFactory.loadData()
+    }
 
     func convert(model: QuizQuestion) -> QuizStepViewModel {
         QuizStepViewModel(
@@ -22,8 +35,9 @@ final class MovieQuizPresenter {
         currentQuestionIndex == questionsAmount - 1
     }
 
-    func resetProgress() {
-        currentQuestionIndex = 0
+    func restartGame() {
+        (currentQuestionIndex, correctAnswers) = (0, 0)
+        questionFactory.requestNextQuestion()
     }
 
     func switchToNextQuestion() {
@@ -43,8 +57,12 @@ final class MovieQuizPresenter {
             return
         }
         let givenAnswer = isYes
+        let isCorrect = givenAnswer == currentQuestion.correctAnswer
+        if isCorrect {
+            correctAnswers += 1
+        }
         viewController.configureButtons(isEnabled: false)
-        viewController.showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+        viewController.showAnswerResult(isCorrect: isCorrect)
     }
 
     func didReceiveNextQuestion(question: QuizQuestion?) {
@@ -55,14 +73,36 @@ final class MovieQuizPresenter {
         showCurrentQuestion()
     }
 
+    func didLoadDataFromServer() {
+        viewController?.hideLoadingIndicator()
+        questionFactory.requestNextQuestion()
+    }
+
+    func didFailToLoadData(with error: Error) {
+        viewController?.hideLoadingIndicator()
+        viewController?.showNetworkError(message: error.localizedDescription)
+    }
+
     private func showCurrentQuestion() {
         DispatchQueue.main.async { [weak self] in
-            guard let self, let question = self.currentQuestion else {
+            guard let self,
+                  let question = self.currentQuestion,
+                  let viewController = self.viewController else {
                 return
             }
             let viewModel = self.convert(model: question)
-            self.viewController?.show(quiz: viewModel)
-            self.viewController?.configureButtons(isEnabled: true)
+            viewController.show(quiz: viewModel)
+            viewController.configureButtons(isEnabled: true)
+        }
+    }
+
+    func showNextQuestionOrResult() {
+        if isLastQuestion() {
+            statisticService?.store(correct: correctAnswers, total: questionsAmount)
+            viewController?.showResult()
+        } else {
+            switchToNextQuestion()
+            questionFactory.requestNextQuestion()
         }
     }
 }
