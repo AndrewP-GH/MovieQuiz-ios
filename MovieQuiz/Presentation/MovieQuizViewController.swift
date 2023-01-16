@@ -9,16 +9,15 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     @IBOutlet private var activityIndicator: UIActivityIndicatorView!
 
     private var correctAnswers: Int = 0
-    private var currentQuestion: QuizQuestion?
     private var questionFactory: QuestionFactoryProtocol!
     private var statisticService: StatisticService!
     private var alertPresenter: AlertPresenter!
-    private var presenter: MovieQuizPresenter!
+    private let presenter = MovieQuizPresenter()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         imageView.layer.cornerRadius = 20
-        presenter = MovieQuizPresenter()
+        presenter.viewController = self
         alertPresenter = AlertPresenter()
         questionFactory = QuestionFactory(delegate: self, moviesLoader: MoviesLoader())
         statisticService = StatisticServiceImplementation()
@@ -31,11 +30,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
 
     func didReceiveNextQuestion(question: QuizQuestion?) {
-        guard let question else {
-            return
-        }
-        currentQuestion = question
-        showCurrentQuestion()
+        presenter.didReceiveNextQuestion(question: question)
     }
 
     func didLoadDataFromServer() {
@@ -49,24 +44,14 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
 
     @IBAction func noButtonClicked(_ sender: UIButton) {
-        guard let currentQuestion else {
-            return
-        }
-        configureButtons(isEnabled: false)
-        let givenAnswer = false
-        showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+        presenter.noButtonClicked()
     }
 
     @IBAction func yesButtonClicked(_ sender: UIButton) {
-        guard let currentQuestion else {
-            return
-        }
-        configureButtons(isEnabled: false)
-        let givenAnswer = true
-        showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+        presenter.yesButtonClicked()
     }
 
-    private func configureButtons(isEnabled: Bool) {
+    func configureButtons(isEnabled: Bool) {
         yesButton.isEnabled = isEnabled
         noButton.isEnabled = isEnabled
     }
@@ -91,25 +76,14 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         alertPresenter.show(with: model, in: self)
     }
 
-    private func showCurrentQuestion() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self, let question = self.currentQuestion else {
-                return
-            }
-            let viewModel = self.presenter.convert(model: question)
-            self.show(quiz: viewModel)
-            self.configureButtons(isEnabled: true)
-        }
-    }
-
-    private func show(quiz step: QuizStepViewModel) {
+    func show(quiz step: QuizStepViewModel) {
         imageView.layer.borderWidth = 0
         imageView.image = step.image
         textLabel.text = step.question
         counterLabel.text = step.questionNumber
     }
 
-    private func showAnswerResult(isCorrect: Bool) {
+    func showAnswerResult(isCorrect: Bool) {
         if isCorrect {
             correctAnswers += 1
         }
