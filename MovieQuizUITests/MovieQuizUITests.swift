@@ -22,32 +22,26 @@ final class MovieQuizUITests: XCTestCase {
         app = nil
     }
 
-    func testButton() {
-        let cases = ["Yes", "No"]
+    func testButtons() {
+        continueAfterFailure = true
+        let testCases = [
+            ("Yes", 2),
+            ("No", 3)
+        ]
         let poster = "Poster"
         sleep(3)
-        cases.forEach {
-            let firstPoster = app.images[poster].screenshot().pngRepresentation
+        for (button, index) in testCases {
+            XCTContext.runActivity(named: "Test \(button) button") { _ in
+                let firstPoster = app.images[poster].screenshot().pngRepresentation
 
-            app.buttons[$0].tap()
-            sleep(2)
+                app.buttons[button].tap()
+                sleep(2)
 
-            let secondPoster = app.images[poster].screenshot().pngRepresentation
-            XCTAssertNotEqual(firstPoster, secondPoster)
-        }
-    }
-
-    func testLabel() {
-        let cases = [("Yes", 2), ("No", 3)]
-        sleep(3)
-        cases.forEach {
-            let (button, index) = $0
-
-            app.buttons[button].tap()
-            sleep(2)
-
-            let indexLabel = app.staticTexts["Index"]
-            XCTAssertEqual(indexLabel.label, "\(index)/10")
+                let secondPoster = app.images[poster].screenshot().pngRepresentation
+                XCTAssertNotEqual(firstPoster, secondPoster)
+                let indexLabel = app.staticTexts["Index"]
+                XCTAssertEqual(indexLabel.label, "\(index)/100")
+            }
         }
     }
 
@@ -68,7 +62,7 @@ final class MovieQuizUITests: XCTestCase {
     func testAlertDismiss() {
         sleep(3)
         for _ in 1...10 {
-            app.buttons["No"].tap()
+            app.buttons["Yes"].tap()
             sleep(2)
         }
         let poster = "Poster"
